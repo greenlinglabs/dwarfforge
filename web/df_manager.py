@@ -17,6 +17,10 @@ STOCK_PRESET = {
     "huge":   "LARGE REGION",
 }
 
+WORLD_DIM = {
+    "pocket": 17, "small": 33, "medium": 65, "large": 129, "huge": 257,
+}
+
 MAX_CIVS = {
     "pocket": 4, "small": 8, "medium": 16, "large": 24, "huge": 40,
 }
@@ -42,23 +46,31 @@ async def _broadcast(msg: str):
 def _read_stock_preset(preset_title: str) -> list[str]:
     """Read a named preset block from the backed-up stock world_gen.txt."""
     stock_path = DF_DIR / "data" / "init" / "world_gen_stock.txt"
-    text = stock_path.read_text(errors="replace")
-    lines = text.splitlines(keepends=True)
-    result = []
-    in_block = False
-    for line in lines:
-        stripped = line.strip()
-        if stripped == "[WORLD_GEN]":
-            if in_block:
-                break  # start of next block = end of ours
-            in_block = True
-            result.append(line)
-        elif in_block:
-            if stripped.startswith(f"[TITLE:{preset_title}]"):
-                result.append(line)
-            else:
-                result.append(line)
-    return result
+    lines = stock_path.read_text(errors="replace").splitlines(keepends=True)
+
+    # Find the TITLE line for this preset
+    title_idx = next(
+        (i for i, l in enumerate(lines) if l.strip() == f"[TITLE:{preset_title}]"),
+        None
+    )
+    if title_idx is None:
+        raise ValueError(f"Preset '{preset_title}' not found in stock world_gen.txt")
+
+    # Walk back to find the [WORLD_GEN] that owns this title
+    start = next(
+        (i for i in range(title_idx, -1, -1) if lines[i].strip() == "[WORLD_GEN]"),
+        None
+    )
+    if start is None:
+        raise ValueError(f"No [WORLD_GEN] header found for preset '{preset_title}'")
+
+    # Find the next [WORLD_GEN] to mark the end of this block
+    end = next(
+        (i for i in range(start + 1, len(lines)) if lines[i].strip() == "[WORLD_GEN]"),
+        len(lines)
+    )
+
+    return lines[start:end]
 
 
 def write_worldgen_params(config: dict) -> str:
@@ -71,8 +83,11 @@ def write_worldgen_params(config: dict) -> str:
     stock_name = STOCK_PRESET.get(size_key, "SMALL REGION")
     max_civs = MAX_CIVS.get(size_key, 16)
 
+    dim = WORLD_DIM.get(size_key, 65)
+
     overrides = {
         "TITLE":                  title,
+        "DIM":                    f"{dim}:{dim}",
         "END_YEAR":               str(int(config.get("history", 250))),
         "MEGABEAST_CAP":          str(int(config.get("megabeast_cap", 18))),
         "SEMIMEGABEAST_CAP":      str(int(config.get("semimegabeast_cap", 37))),
