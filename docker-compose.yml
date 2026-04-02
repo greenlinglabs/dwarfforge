@@ -1,0 +1,21 @@
+services:
+  dwarf-forge:
+    build: .
+    container_name: dwarf-forge
+    restart: unless-stopped
+    ports:
+      - "8002:8000"
+    volumes:
+      - dwarf-worlds:/saves
+    environment:
+      - DISPLAY=:99
+      - DF_DIR=/opt/dwarf-fortress
+      - SAVES_DIR=/saves
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  dwarf-worlds:
