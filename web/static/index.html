@@ -324,6 +324,213 @@
       background: var(--border);
       margin: 16px 0;
     }
+
+    /* ── Legends viewer ── */
+    #legends-panel {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      overflow: hidden;
+      border-left: 1px solid var(--border);
+    }
+    #legends-panel.active { display: flex; }
+
+    #tab-worlds.active {
+      flex-direction: row;
+    }
+
+    .worlds-list-col {
+      width: 320px;
+      flex-shrink: 0;
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+    }
+
+    .legends-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+      flex-shrink: 0;
+    }
+
+    .legends-header .panel-header { padding: 0; border: none; background: none; }
+
+    .legends-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 3px 10px;
+      cursor: pointer;
+    }
+    .legends-close:hover { border-color: var(--accent); color: var(--accent-glow); }
+
+    .legends-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0;
+    }
+
+    .legends-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+      flex-shrink: 0;
+    }
+
+    .ltab {
+      padding: 8px 16px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      border-right: 1px solid var(--border);
+    }
+    .ltab.active { color: var(--accent-glow); border-bottom: 2px solid var(--accent); }
+    .ltab:hover { color: var(--text); }
+
+    .legends-section { display: none; height: 100%; overflow-y: auto; }
+    .legends-section.active { display: block; }
+
+    /* Overview */
+    .ov-world-name {
+      padding: 16px 16px 4px;
+      font-family: var(--serif);
+      font-size: 20px;
+      color: var(--text-bright);
+    }
+    .ov-world-sub {
+      padding: 0 16px 14px;
+      color: var(--text-dim);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+    .legends-summary {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin: 0 16px 16px;
+    }
+    .summary-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 10px;
+      text-align: center;
+    }
+    .summary-card .num {
+      font-size: 20px;
+      color: var(--accent-glow);
+      font-family: var(--serif);
+    }
+    .summary-card .lbl {
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+    .pop-bar-row { display: flex; align-items: center; gap: 8px; padding: 4px 16px; }
+    .pop-bar-label { width: 110px; font-size: 12px; color: var(--text); flex-shrink: 0; }
+    .pop-bar-track { flex: 1; height: 6px; background: var(--border); }
+    .pop-bar-fill  { height: 100%; background: var(--accent); }
+    .pop-bar-count { width: 70px; text-align: right; font-size: 11px; color: var(--text-dim); flex-shrink: 0; }
+
+    /* Filter bar */
+    .filter-bar {
+      display: flex; gap: 8px; padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .filter-bar input, .filter-bar select {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 4px 8px;
+      min-width: 0;
+    }
+    .filter-bar input { flex: 1; }
+    .filter-bar select { flex-shrink: 0; }
+    .filter-bar input:focus, .filter-bar select:focus {
+      outline: none; border-color: var(--accent-dim);
+    }
+    .filter-count { font-size: 11px; color: var(--text-dim); padding: 4px 4px; align-self: center; }
+
+    /* Civ accordion */
+    .civ-list { padding: 8px 12px; }
+    .civ-card { border: 1px solid var(--border); margin-bottom: 6px; }
+    .civ-card-hdr {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; cursor: pointer;
+      background: var(--panel);
+    }
+    .civ-card-hdr:hover { background: #1c1c1c; }
+    .civ-card-hdr .civ-name { flex: 1; color: var(--text-bright); font-size: 13px; }
+    .civ-card-hdr .civ-race { font-size: 10px; color: var(--accent-dim); }
+    .civ-card-hdr .civ-counts { font-size: 10px; color: var(--text-dim); }
+    .civ-card-hdr .civ-arrow { font-size: 10px; color: var(--text-dim); width: 10px; }
+    .civ-card-body { display: none; padding: 0 12px 12px; background: var(--bg); }
+    .civ-card-body.open { display: block; }
+    .civ-section-hdr {
+      font-size: 10px; letter-spacing: 1px; color: var(--text-dim);
+      padding: 10px 0 4px; border-bottom: 1px solid var(--border); margin-bottom: 6px;
+    }
+    .deity-row { padding: 3px 0; font-size: 12px; color: var(--text); }
+    .deity-row .deity-name { color: var(--text-bright); }
+    .deity-row .deity-type { font-size: 10px; color: var(--accent-dim); margin: 0 4px; }
+    .deity-row .deity-domains { color: var(--text-dim); font-size: 11px; }
+    .ruler-compact { padding: 3px 0; font-size: 12px; border-bottom: 1px solid #1e1e1e; }
+    .ruler-compact .rc-role { font-size: 10px; color: var(--warning); margin-right: 6px; }
+    .ruler-compact .rc-name { color: var(--text-bright); }
+    .ruler-compact .rc-years { color: var(--text-dim); font-size: 11px; margin-left: 6px; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; }
+    .legends-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .legends-table th {
+      text-align: left; color: var(--text-dim); font-size: 10px;
+      letter-spacing: 1px; padding: 6px 8px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel); position: sticky; top: 0; z-index: 1;
+    }
+    .legends-table td { padding: 5px 8px; border-bottom: 1px solid #1e1e1e; color: var(--text); }
+    .legends-table tr:hover td { background: #1a1a1a; }
+
+    /* Params */
+    .params-wrap { padding: 12px 16px; }
+    .param-row { display: flex; gap: 12px; padding: 4px 0; border-bottom: 1px solid #1e1e1e; font-size: 12px; }
+    .param-key { color: var(--accent-dim); width: 220px; flex-shrink: 0; }
+    .param-val { color: var(--text); }
+
+    .tag-race  { color: var(--accent-dim); font-size: 10px; }
+    .tag-type  { color: var(--warning); font-size: 10px; }
+    .tag-force { color: #6b9e6b; font-size: 10px; }
+
+    .legends-btn {
+      background: transparent;
+      border: 1px solid var(--accent-dim);
+      color: var(--accent-glow);
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 4px 10px;
+      cursor: pointer;
+      margin-right: 6px;
+      transition: all 0.15s;
+    }
+    .legends-btn:hover { background: var(--accent-dim); }
   </style>
 </head>
 <body>
@@ -419,9 +626,33 @@
 
   <!-- ── Worlds tab ── -->
   <div id="tab-worlds">
-    <div style="flex:1;overflow-y:auto;">
+    <div class="worlds-list-col">
       <div class="panel-header" style="padding:10px 16px;border-bottom:1px solid var(--border);">SAVED WORLDS</div>
       <div id="worlds-container"></div>
+    </div>
+
+    <!-- Legends viewer panel -->
+    <div id="legends-panel">
+      <div class="legends-header">
+        <div class="panel-header">LEGENDS — <span id="legends-world-name"></span></div>
+        <button class="legends-close" onclick="closeLegends()">✕ CLOSE</button>
+      </div>
+      <div class="legends-tabs">
+        <button class="ltab active" onclick="showLTab('overview')">OVERVIEW</button>
+        <button class="ltab" onclick="showLTab('civs')">CIVILIZATIONS</button>
+        <button class="ltab" onclick="showLTab('rulers')">RULERS</button>
+        <button class="ltab" onclick="showLTab('sites')">SITES</button>
+        <button class="ltab" onclick="showLTab('deities')">DEITIES</button>
+        <button class="ltab" onclick="showLTab('params')">PARAMS</button>
+      </div>
+      <div class="legends-body">
+        <div id="ltab-overview" class="legends-section active"></div>
+        <div id="ltab-civs"     class="legends-section"></div>
+        <div id="ltab-rulers"   class="legends-section" style="display:none;flex-direction:column"></div>
+        <div id="ltab-sites"    class="legends-section" style="display:none;flex-direction:column"></div>
+        <div id="ltab-deities"  class="legends-section"></div>
+        <div id="ltab-params"   class="legends-section"></div>
+      </div>
     </div>
   </div>
 
@@ -640,7 +871,10 @@ async function loadWorlds() {
           <div class="world-name">${escHtml(w.name)}</div>
           <div class="world-meta">${date} &nbsp;·&nbsp; ${size}</div>
         </div>
-        <button class="del-btn" onclick="deleteWorld('${escHtml(w.name)}', this)">DELETE</button>`;
+        <div style="display:flex;gap:6px;">
+          <button class="legends-btn" onclick="openLegends('${escHtml(w.name)}')">LEGENDS</button>
+          <button class="del-btn" onclick="deleteWorld('${escHtml(w.name)}', this)">DELETE</button>
+        </div>`;
       ul.appendChild(li);
     });
     container.innerHTML = "";
@@ -678,6 +912,299 @@ function formatBytes(b) {
 
 function escHtml(s) {
   return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// ── Legends viewer ──
+let currentLTab = 'overview';
+let legendsData  = null;
+const L_TABS = ['overview','civs','rulers','sites','deities','params'];
+
+function showLTab(name) {
+  currentLTab = name;
+  document.querySelectorAll('.ltab').forEach((b, i) => b.classList.toggle('active', L_TABS[i] === name));
+  document.querySelectorAll('.legends-section').forEach(s => {
+    const active = s.id === 'ltab-' + name;
+    s.style.display = active ? (s.dataset.flex ? 'flex' : 'block') : 'none';
+    s.classList.toggle('active', active);
+  });
+}
+
+function closeLegends() {
+  document.getElementById('legends-panel').classList.remove('active');
+}
+
+async function openLegends(name) {
+  document.getElementById('legends-world-name').textContent = name;
+  document.getElementById('legends-panel').classList.add('active');
+  document.getElementById('ltab-overview').innerHTML = '<div class="worlds-empty" style="padding:20px">Loading legends...</div>';
+  L_TABS.slice(1).forEach(t => { document.getElementById('ltab-' + t).innerHTML = ''; });
+  showLTab('overview');
+  try {
+    const resp = await fetch(`/api/worlds/${encodeURIComponent(name)}/legends`);
+    if (!resp.ok) {
+      const err = await resp.json();
+      document.getElementById('ltab-overview').innerHTML =
+        `<div class="worlds-empty" style="padding:20px">${escHtml(err.detail || 'No legends data.')}</div>`;
+      return;
+    }
+    legendsData = await resp.json();
+    if (legendsData.error) {
+      document.getElementById('ltab-overview').innerHTML =
+        `<div class="worlds-empty" style="padding:20px">${escHtml(legendsData.error)}</div>`;
+      return;
+    }
+    renderLegends(legendsData);
+  } catch (e) {
+    document.getElementById('ltab-overview').innerHTML =
+      `<div class="worlds-empty" style="padding:20px">Error: ${e}</div>`;
+  }
+}
+
+function renderLegends(d) {
+  renderOverview(d);
+  renderCivs(d);
+  renderRulers(d);
+  renderSites(d);
+  renderDeities(d);
+  renderParams(d);
+}
+
+// ── OVERVIEW ──
+function renderOverview(d) {
+  const s = d.summary || {};
+  const maxPop = Math.max(...(d.populations||[]).map(p => p.count), 1);
+  const popBars = (d.populations||[]).map(p => `
+    <div class="pop-bar-row">
+      <div class="pop-bar-label">${escHtml(p.race)}</div>
+      <div class="pop-bar-track"><div class="pop-bar-fill" style="width:${Math.round(p.count/maxPop*100)}%"></div></div>
+      <div class="pop-bar-count">${p.count.toLocaleString()}</div>
+    </div>`).join('');
+  document.getElementById('ltab-overview').innerHTML = `
+    <div class="ov-world-name">${escHtml(d.world_title||'')}</div>
+    <div class="ov-world-sub">${escHtml(d.world_subtitle||'')}</div>
+    <div class="legends-summary">
+      <div class="summary-card"><div class="num">${(d.total_pop||0).toLocaleString()}</div><div class="lbl">TOTAL POP</div></div>
+      <div class="summary-card"><div class="num">${s.civs||0}</div><div class="lbl">CIVILIZATIONS</div></div>
+      <div class="summary-card"><div class="num">${s.rulers||0}</div><div class="lbl">RULERS</div></div>
+      <div class="summary-card"><div class="num">${s.sites||0}</div><div class="lbl">SITES</div></div>
+      <div class="summary-card"><div class="num">${s.deities||0}</div><div class="lbl">DEITIES</div></div>
+    </div>
+    <div style="padding:0 0 8px">
+      <div style="padding:0 16px 6px;font-size:10px;letter-spacing:1px;color:var(--text-dim)">CIVILIZED POPULATION BY RACE</div>
+      ${popBars || '<div class="worlds-empty">No population data.</div>'}
+    </div>`;
+}
+
+// ── CIVILIZATIONS ──
+function renderCivs(d) {
+  if (!d.entities || !d.entities.length) {
+    document.getElementById('ltab-civs').innerHTML = '<div class="worlds-empty" style="padding:20px">No civilization data.</div>';
+    return;
+  }
+  const cards = d.entities.map((civ, i) => {
+    const deityHtml = civ.deities.length
+      ? civ.deities.map(de => `
+          <div class="deity-row">
+            <span class="deity-name">${escHtml(de.name)}</span>
+            <span class="deity-type tag-${de.type==='force'?'force':'race'}">${de.type}</span>
+            <span class="deity-domains">${escHtml(de.domains)}</span>
+          </div>`).join('')
+      : '<div style="color:var(--text-dim);font-size:11px">No recorded deities.</div>';
+
+    // Group leaders by role
+    const byRole = {};
+    (civ.leaders||[]).forEach(l => { (byRole[l.role] = byRole[l.role]||[]).push(l); });
+    const leaderHtml = Object.entries(byRole).map(([role, rulers]) => `
+      <div style="margin-top:8px">
+        <div style="font-size:10px;color:var(--warning);letter-spacing:1px;margin-bottom:4px">${escHtml(role.toUpperCase())}</div>
+        ${rulers.map(r => {
+          const reignEnd = r.death || '?';
+          const years = (r.reign_began != null && r.death)
+            ? `yr ${r.reign_began}–${r.death}`
+            : r.reign_began != null ? `yr ${r.reign_began}–present` : '';
+          return `<div class="ruler-compact">
+            <span class="rc-name">${escHtml(r.name)}</span>
+            <span class="rc-years">${escHtml(years)}</span>
+            ${r.deity ? `<span style="font-size:10px;color:var(--text-dim);margin-left:6px">· ${escHtml(r.deity)} ${escHtml(r.devotion)}</span>` : ''}
+          </div>`;
+        }).join('')}
+      </div>`).join('');
+
+    return `
+      <div class="civ-card">
+        <div class="civ-card-hdr" onclick="toggleCiv(${i})">
+          <span class="civ-arrow" id="civ-arrow-${i}">▶</span>
+          <span class="civ-name">${escHtml(civ.name)}</span>
+          <span class="civ-race">${escHtml(civ.race)}</span>
+          <span class="civ-counts">${civ.deities.length} deities · ${(civ.leaders||[]).length} rulers</span>
+        </div>
+        <div class="civ-card-body" id="civ-body-${i}">
+          <div class="civ-section-hdr">DEITIES &amp; WORSHIP</div>
+          ${deityHtml}
+          ${leaderHtml ? `<div class="civ-section-hdr" style="margin-top:12px">RULING LINEAGE</div>${leaderHtml}` : ''}
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('ltab-civs').innerHTML = `<div class="civ-list">${cards}</div>`;
+}
+
+function toggleCiv(i) {
+  const body  = document.getElementById('civ-body-' + i);
+  const arrow = document.getElementById('civ-arrow-' + i);
+  const open  = body.classList.toggle('open');
+  arrow.textContent = open ? '▼' : '▶';
+}
+
+// ── RULERS ──
+function renderRulers(d, civFilter, roleFilter, nameFilter) {
+  const el = document.getElementById('ltab-rulers');
+  civFilter  = civFilter  || document.getElementById('ruler-civ-filter')?.value  || '';
+  roleFilter = roleFilter || document.getElementById('ruler-role-filter')?.value || '';
+  nameFilter = nameFilter || document.getElementById('ruler-name-filter')?.value || '';
+
+  const civs  = [...new Set((d.figures||[]).map(f => f.civ))].sort();
+  const roles = [...new Set((d.figures||[]).map(f => f.role))].sort();
+
+  const filtered = (d.figures||[]).filter(f =>
+    (!civFilter  || f.civ  === civFilter) &&
+    (!roleFilter || f.role === roleFilter) &&
+    (!nameFilter || f.name.toLowerCase().includes(nameFilter.toLowerCase()))
+  );
+
+  const rows = filtered.map(f => {
+    const reigned = (f.reign_began != null && f.death)
+      ? `yr ${f.reign_began}–${f.death} (${parseInt(f.death) - f.reign_began} yrs)`
+      : f.reign_began != null ? `yr ${f.reign_began}–?` : '?';
+    const children = f.children > 0 ? f.children : '—';
+    return `<tr>
+      <td style="color:var(--text-bright)">${escHtml(f.name)}</td>
+      <td style="color:var(--text-dim);font-size:11px">${escHtml(f.civ)}</td>
+      <td><span class="tag-type">${escHtml(f.role)}</span></td>
+      <td style="color:var(--text-dim);font-size:11px">${escHtml(reigned)}</td>
+      <td style="color:var(--text-dim);font-size:11px">${escHtml(f.succession)}</td>
+      <td style="color:var(--text-dim);font-size:11px;text-align:center">${children}</td>
+      <td style="font-size:11px">${f.deity ? `${escHtml(f.deity)} <span style="color:var(--text-dim)">${escHtml(f.devotion)}</span>` : '—'}</td>
+    </tr>`;
+  }).join('');
+
+  const civOpts  = civs.map(c  => `<option value="${escHtml(c)}"${c===civFilter?' selected':''}>${escHtml(c)}</option>`).join('');
+  const roleOpts = roles.map(r => `<option value="${escHtml(r)}"${r===roleFilter?' selected':''}>${escHtml(r)}</option>`).join('');
+
+  el.innerHTML = `
+    <div class="filter-bar">
+      <input id="ruler-name-filter" type="text" placeholder="Search name…" value="${escHtml(nameFilter)}"
+        oninput="renderRulers(legendsData)">
+      <select id="ruler-civ-filter" onchange="renderRulers(legendsData)">
+        <option value="">All Civilizations</option>${civOpts}
+      </select>
+      <select id="ruler-role-filter" onchange="renderRulers(legendsData)">
+        <option value="">All Roles</option>${roleOpts}
+      </select>
+      <span class="filter-count">${filtered.length} / ${(d.figures||[]).length}</span>
+    </div>
+    <div class="table-wrap" style="flex:1;overflow-y:auto">
+      ${rows.length ? `<table class="legends-table">
+        <thead><tr><th>NAME</th><th>CIVILIZATION</th><th>ROLE</th><th>REIGN</th><th>SUCCESSION</th><th style="text-align:center">CHILDREN</th><th>FAITH</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>` : '<div class="worlds-empty" style="padding:20px">No rulers match filters.</div>'}
+    </div>`;
+  el.style.display = currentLTab === 'rulers' ? 'flex' : 'none';
+  el.style.flexDirection = 'column';
+}
+
+// ── SITES ──
+function renderSites(d, typeFilter, nameFilter, sortBy) {
+  const el = document.getElementById('ltab-sites');
+  typeFilter = typeFilter || document.getElementById('site-type-filter')?.value || '';
+  nameFilter = nameFilter || document.getElementById('site-name-filter')?.value || '';
+  sortBy     = sortBy     || document.getElementById('site-sort')?.value         || 'pop';
+
+  let filtered = (d.sites||[]).filter(s =>
+    (!typeFilter || s.type === typeFilter) &&
+    (!nameFilter || s.name.toLowerCase().includes(nameFilter.toLowerCase()) ||
+                    s.native.toLowerCase().includes(nameFilter.toLowerCase()))
+  );
+  if (sortBy === 'pop')  filtered = filtered.slice().sort((a,b) => b.total_pop - a.total_pop);
+  if (sortBy === 'name') filtered = filtered.slice().sort((a,b) => a.name.localeCompare(b.name));
+  if (sortBy === 'type') filtered = filtered.slice().sort((a,b) => a.type.localeCompare(b.type));
+
+  const typeOpts = (d.site_types||[]).map(t =>
+    `<option value="${escHtml(t)}"${t===typeFilter?' selected':''}>${escHtml(t)}</option>`).join('');
+
+  const rows = filtered.slice(0, 400).map(s => {
+    const topPops = s.pops.slice(0,3).map(p => `${p.count.toLocaleString()} ${escHtml(p.creature)}`).join(', ');
+    const morePops = s.pops.length > 3 ? ` <span style="color:var(--text-dim)">+${s.pops.length-3} more</span>` : '';
+    return `<tr>
+      <td style="color:var(--text-bright)">${escHtml(s.name)}</td>
+      <td style="color:var(--text-dim);font-size:11px">${escHtml(s.native)}</td>
+      <td><span class="tag-type">${escHtml(s.type)}</span></td>
+      <td style="text-align:right;color:var(--text-dim);font-size:11px">${s.total_pop > 0 ? s.total_pop.toLocaleString() : '—'}</td>
+      <td style="font-size:11px;color:var(--text-dim)">${topPops}${morePops}</td>
+    </tr>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div class="filter-bar">
+      <input id="site-name-filter" type="text" placeholder="Search name…" value="${escHtml(nameFilter)}"
+        oninput="renderSites(legendsData)">
+      <select id="site-type-filter" onchange="renderSites(legendsData)">
+        <option value="">All Types</option>${typeOpts}
+      </select>
+      <select id="site-sort" onchange="renderSites(legendsData)">
+        <option value="pop"${sortBy==='pop'?' selected':''}>Sort: Population</option>
+        <option value="name"${sortBy==='name'?' selected':''}>Sort: Name</option>
+        <option value="type"${sortBy==='type'?' selected':''}>Sort: Type</option>
+      </select>
+      <span class="filter-count">${filtered.length} / ${(d.sites||[]).length}${filtered.length>400?' (showing 400)':''}</span>
+    </div>
+    <div class="table-wrap" style="flex:1;overflow-y:auto">
+      ${rows.length ? `<table class="legends-table">
+        <thead><tr><th>ENGLISH NAME</th><th>NATIVE NAME</th><th>TYPE</th><th style="text-align:right">POP</th><th>INHABITANTS</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>` : '<div class="worlds-empty" style="padding:20px">No sites match filters.</div>'}
+    </div>`;
+  el.style.display = currentLTab === 'sites' ? 'flex' : 'none';
+  el.style.flexDirection = 'column';
+}
+
+// ── DEITIES ──
+function renderDeities(d) {
+  if (!d.deities || !d.deities.length) {
+    document.getElementById('ltab-deities').innerHTML = '<div class="worlds-empty" style="padding:20px">No deity data.</div>';
+    return;
+  }
+  const rows = d.deities.map(de => `<tr>
+    <td style="color:var(--text-bright)">${escHtml(de.name)}</td>
+    <td><span class="tag-${de.type==='force'?'force':'race'}">${de.type}</span></td>
+    <td style="color:var(--text-dim);font-size:11px">${escHtml(de.domains)}</td>
+    <td style="font-size:11px;color:var(--text-dim)">${de.worshipped_by.map(c => escHtml(c)).join(', ')}</td>
+  </tr>`).join('');
+  document.getElementById('ltab-deities').innerHTML = `
+    <div class="table-wrap">
+      <table class="legends-table">
+        <thead><tr><th>NAME</th><th>TYPE</th><th>DOMAINS</th><th>WORSHIPPED BY</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ── PARAMS ──
+function renderParams(d) {
+  if (!d.world_params || !d.world_params.length) {
+    document.getElementById('ltab-params').innerHTML = '<div class="worlds-empty" style="padding:20px">No parameters saved.</div>';
+    return;
+  }
+  const rows = d.world_params.map(p =>
+    `<div class="param-row"><div class="param-key">${escHtml(p.key)}</div><div class="param-val">${escHtml(p.value)}</div></div>`
+  ).join('');
+  document.getElementById('ltab-params').innerHTML = `<div class="params-wrap">${rows}</div>`;
+}
+
+function tableHtml(headers, rows) {
+  if (!rows.length) return '<div class="worlds-empty">No data.</div>';
+  const ths = headers.map(h => `<th>${h}</th>`).join('');
+  const trs = rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('');
+  return `<div class="table-wrap"><table class="legends-table"><thead><tr>${ths}</tr></thead><tbody>${trs}</tbody></table></div>`;
 }
 
 // ── Init ──

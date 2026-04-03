@@ -81,6 +81,16 @@ async def list_worlds():
     return df_manager.list_worlds()
 
 
+@app.get("/api/worlds/{name}/legends")
+async def get_legends(name: str):
+    if "/" in name or "\\" in name or name.startswith("."):
+        raise HTTPException(status_code=400, detail="Invalid world name.")
+    data = df_manager.parse_legends(name)
+    if "error" in data:
+        raise HTTPException(status_code=404, detail=data["error"])
+    return data
+
+
 @app.delete("/api/worlds/{name}")
 async def delete_world(name: str):
     # Sanitize: disallow path traversal
