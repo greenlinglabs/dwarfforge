@@ -7,7 +7,14 @@ from pathlib import Path
 from typing import Optional, Callable, Awaitable
 
 DF_DIR = Path(os.environ.get("DF_DIR", "/opt/dwarf-fortress"))
-SAVES_DIR = Path(os.environ.get("SAVES_DIR", "/saves"))
+
+
+def _saves_dir() -> Path:
+    try:
+        import settings_manager
+        return Path(settings_manager.get_settings()["save_destination_path"])
+    except Exception:
+        return Path(os.environ.get("SAVES_DIR", "/saves"))
 
 # Stock preset names that match each UI world size (from DF 0.47.05 world_gen.txt)
 STOCK_PRESET = {
@@ -135,13 +142,20 @@ def write_worldgen_params(config: dict) -> str:
 
 
 async def _move_generated_world(region_id: int) -> Optional[Path]:
-    """Move newly generated region from DF save dir to /saves. Returns dest path."""
+    """Move newly generated region from DF save dir to configured saves location. Returns dest path."""
     save_src = DF_DIR / "data" / "save"
     if not save_src.exists():
         return None
 
-    SAVES_DIR.mkdir(parents=True, exist_ok=True)
-    dest = SAVES_DIR / f"region{region_id}"
+    saves = _saves_dir()
+    saves.mkdir(parents=True, exist_ok=True)
+
+    # Find the next unused regionN slot so we never overwrite existing worlds
+    existing = {e.name for e in saves.iterdir() if e.is_dir()}
+    dest_n = 1
+    while f"region{dest_n}" in existing:
+        dest_n += 1
+    dest = saves / f"region{dest_n}"
 
     # DF 0.47.05 saves to data/save/region<N>/ or data/save/current/
     candidates = [e for e in save_src.iterdir()
@@ -154,10 +168,8 @@ async def _move_generated_world(region_id: int) -> Optional[Path]:
         await _broadcast(json.dumps({"type": "log", "line": "> Warning: no save found in data/save/"}))
         return None
 
-    if dest.exists():
-        shutil.rmtree(dest)
     shutil.move(str(src), str(dest))
-    await _broadcast(json.dumps({"type": "log", "line": f"> World saved to /saves/region{region_id}"}))
+    await _broadcast(json.dumps({"type": "log", "line": f"> World saved to {dest}"}))
     return dest
 
 
@@ -357,7 +369,7 @@ def _parse_params(text: str):
 
 def parse_legends(world_name: str) -> dict:
     """Parse all available legend data for a saved world."""
-    world_dir = SAVES_DIR / world_name
+    world_dir = _saves_dir() / world_name
     if not world_dir.exists():
         return {"error": f"World '{world_name}' not found in saves."}
 
@@ -533,7 +545,7 @@ async def run_generation(config: dict):
             # 1. Move the world save to /saves/region<N>/
             save_dest = await _move_generated_world(region_id)
             if save_dest is None:
-                save_dest = SAVES_DIR / f"region{region_id}"
+                save_dest = _saves_dir() / f"region{region_id}"
                 save_dest.mkdir(parents=True, exist_ok=True)
                 await _broadcast(json.dumps({"type": "log", "line": "> Warning: world save directory not found."}))
             # 2. Move the auto-exported legends files (region<N>-*) into the save folder
@@ -567,10 +579,11 @@ async def cancel_generation():
 
 
 def list_worlds() -> list:
-    if not SAVES_DIR.exists():
+    saves = _saves_dir()
+    if not saves.exists():
         return []
     worlds = []
-    for entry in sorted(SAVES_DIR.iterdir()):
+    for entry in sorted(saves.iterdir()):
         if entry.is_dir():
             stat = entry.stat()
             size = sum(f.stat().st_size for f in entry.rglob("*") if f.is_file())
@@ -583,7 +596,7 @@ def list_worlds() -> list:
 
 
 def delete_world(name: str) -> bool:
-    world_path = SAVES_DIR / name
+    world_path = _saves_dir() / name
     if world_path.exists() and world_path.is_dir():
         shutil.rmtree(world_path)
         return True

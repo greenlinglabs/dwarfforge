@@ -9,6 +9,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 import df_manager
+import settings_manager
 
 app = FastAPI(title="Dwarf Forge")
 
@@ -100,6 +101,29 @@ async def delete_world(name: str):
     if not deleted:
         raise HTTPException(status_code=404, detail="World not found.")
     return {"status": "deleted"}
+
+
+@app.get("/api/settings")
+async def get_settings():
+    s = settings_manager.get_settings()
+    if s.get("smb_password"):
+        s["smb_password"] = "***"
+    return s
+
+
+@app.post("/api/settings")
+async def post_settings(data: dict):
+    valid_destinations = {"local", "network"}
+    valid_share_types  = {"smb", "nfs", "local"}
+    if "save_destination" in data and data["save_destination"] not in valid_destinations:
+        raise HTTPException(status_code=400, detail="Invalid save_destination value.")
+    if "share_type" in data and data["share_type"] not in valid_share_types:
+        raise HTTPException(status_code=400, detail="Invalid share_type value.")
+    # If the client echoed back the masked sentinel, preserve the real password
+    if data.get("smb_password") == "***":
+        data["smb_password"] = settings_manager.get_settings()["smb_password"]
+    settings_manager.save_settings(data)
+    return {"status": "ok"}
 
 
 @app.websocket("/ws/log")

@@ -22,6 +22,8 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     tar \
     bzip2 \
+    cifs-utils \
+    nfs-common \
     && rm -rf /var/lib/apt/lists/*
 
 # Fetch and install DF + DFHack overlay at build time

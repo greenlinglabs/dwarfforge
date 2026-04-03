@@ -7,6 +7,8 @@ services:
       - "8002:8000"
     volumes:
       - dwarf-worlds:/saves
+      - dwarf-data:/app/data
+    privileged: true
     environment:
       - DISPLAY=:99
       - DF_DIR=/opt/dwarf-fortress
@@ -19,3 +21,4 @@ services:
 
 volumes:
   dwarf-worlds:
+  dwarf-data:
